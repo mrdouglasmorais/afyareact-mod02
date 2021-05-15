@@ -4,6 +4,8 @@ import React, {
   FormEvent
 } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { toast } from 'react-toastify';
 
 import api from '../../service/api';
@@ -22,6 +24,8 @@ const Form: React.FC = () => {
 
   const [isLoad, setIsLoad] = useState<boolean>(false)
 
+  const history = useHistory()
+
   const postSignUpData = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -30,14 +34,15 @@ const Form: React.FC = () => {
       api.post('usuarios', formDataContent).then(
         response => {
           toast.success('Cadastros realizado com sucesso!')
-          setIsLoad(!isLoad);
+          setTimeout(() => {
+            history.push('/login')
+          }, 1500)
         }
       ).catch(err => {
-        toast.error('Ooops, falha no engano!')
-        setIsLoad(!isLoad);
-      })
+        toast.error('Ooops, falha no engano!');
+      }).finally(() => setIsLoad(false))
 
-    }, [formDataContent, isLoad]
+    }, [formDataContent, isLoad, history]
   )
 
   return (
@@ -47,7 +52,6 @@ const Form: React.FC = () => {
           (
             <p>Carregando...</p>
           ) : (
-
             <form onSubmit={postSignUpData}>
               <input type="text" placeholder="Seu nome"
                 onChange={e => { setFormDataContent({ ...formDataContent, nome: e.target.value }) }}
