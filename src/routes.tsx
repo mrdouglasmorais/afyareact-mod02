@@ -14,7 +14,6 @@ const Routes: React.FC = () => {
             <Route path="/contact" component={Contact} />
             <Route path="/login" component={Login} />
             <PrivateRoutes path="/panel" exact component={Panel} />
-            
         </Switch>
       </BrowserRouter>
   );
